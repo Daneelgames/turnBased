@@ -64,6 +64,7 @@ public class MovementSystem : MonoBehaviour
         }
     }
 
+
     GameObject CanMove(Vector3 targetPos)
     {
         RaycastHit hit;
@@ -74,28 +75,85 @@ public class MovementSystem : MonoBehaviour
             return null;
     }
 
+    public void PushObject(HealthEntity he, Vector3 pushOrigin)
+    {
+        SavePosition(he.npc);
+        Vector3 newPos = he.transform.position;
+
+        if (pushOrigin.x < he.transform.position.x)
+        {
+            // push right
+            newPos += Vector3.right;
+        }
+        else if (pushOrigin.x > he.transform.position.x)
+        {
+            // push left
+            newPos += Vector3.left;
+        }
+        else if (pushOrigin.z > he.transform.position.z)
+        {
+            newPos += Vector3.back;
+        }
+        else if (pushOrigin.z < he.transform.position.z)
+        {
+            newPos += Vector3.forward;
+        }
+
+        GameObject targetObj = CanMove(newPos);
+        if (targetObj != null)
+        {
+            if (targetObj.layer == 8) // tile
+            {
+                SavePosition(he.npc);
+                he.transform.LookAt(newPos);
+                //he.anim.SetTrigger("Move"); //animate damaged push
+                StartCoroutine(NpcMoveSmooth(he.npc, newPos));
+            }
+            else if (targetObj.layer == 10) // other unit
+            {
+                foreach (HealthEntity hee in gm.entityList.healthEntities)
+                {
+                    if (hee.gameObject == targetObj)
+                    {
+                        gm.healthSystem.DamageEntity(hee, he);
+                        break;
+                    }
+                }
+            }
+            else if (targetObj.layer == 9) // wall
+            {
+                gm.healthSystem.DamageEntity(he, he);
+            }
+        }
+    }
+
     public IEnumerator NpcMove()
     {
         foreach (NpcEntity npc in gm.entityList.npcEntities)
         {
-            SavePosition(npc);
-            if (npc.canMove && npc.projectileToFire == null)
+            if (npc.health.health > 0)
             {
-                if (npc.moveCooldown > 0)
-                    npc.moveCooldown--;
-                else
+                SavePosition(npc);
+                if (npc.canMove && npc.projectileToFire == null)
                 {
-                    Vector3 newPos = npc.transform.position + RandomDirection();
-                    GameObject targetObj = CanMove(newPos);
-
-                    if (targetObj != null && targetObj.layer == 8)
+                    if (npc.moveCooldown > 0)
+                        npc.moveCooldown--;
+                    else
                     {
-                        SavePosition(npc);
-                        npc.transform.LookAt(newPos);
-                        npc.health.anim.SetTrigger("Move");
-                        StartCoroutine(NpcMoveSmooth(npc, newPos));
+                        Vector3 newPos = npc.transform.position + RandomDirection();
+                        GameObject targetObj = CanMove(newPos);
+
+                        if (targetObj != null && targetObj.layer == 8) // tile
+                        {
+                            SavePosition(npc);
+                            npc.transform.LookAt(newPos);
+                            npc.health.anim.SetTrigger("Move");
+                            StartCoroutine(NpcMoveSmooth(npc, newPos));
+                        }
                     }
                 }
+
+                npc.canMove = true;
             }
         }
 
@@ -109,6 +167,7 @@ public class MovementSystem : MonoBehaviour
         for (int t = 0; t < 9; t++)
         {
             npc.transform.position = Vector3.Lerp(npc.transform.position, newPos, 0.5f);
+            npc.canvas.transform.position = npc.transform.position + npc.canvasOffset;
             yield return new WaitForSeconds(0.01f);
         }
         npc.transform.position = newPos;

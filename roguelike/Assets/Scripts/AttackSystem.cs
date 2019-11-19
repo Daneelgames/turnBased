@@ -41,12 +41,8 @@ public class AttackSystem : MonoBehaviour
                     if (gm.entityList.npcEntities[i].gameObject == targetObject)
                     {
                         //gm.entityList.npcEntities[i].health.health -= 1;
-                        if (gm.entityList.npcEntities[i].projectileToFire != null)
-                        {
-                            DestroyProjectile(gm.entityList.npcEntities[i].projectileToFire);
-                            gm.entityList.npcEntities[i].projectileToFire = null;
-                        }
                         gm.healthSystem.DamageEntity(gm.entityList.npcEntities[i].health, gm.player);
+                        gm.movementSystem.PushObject(gm.entityList.npcEntities[i].health, gm.player.transform.position);
                         break;
                     }
                 }
@@ -129,7 +125,7 @@ public class AttackSystem : MonoBehaviour
                         {
                             foreach (HealthEntity he in gm.entityList.healthEntities)
                             {
-                                if (he != projectiles[i].master)
+                                if (he.health > 0 && he != projectiles[i].master)
                                 {
                                     if (Vector3.Distance(tile.transform.position, he.transform.position) < 0.5f)
                                     {
@@ -150,6 +146,22 @@ public class AttackSystem : MonoBehaviour
                         projectiles[i].damagedObject = damaged;
                         projectiles[i].deathPosition = damaged.transform.position;
                     }
+
+                    if (projectiles[i].stepsLast <= 0)
+                    {
+                        print("stepLast");
+                        DestroyProjectile(projectiles[i]);
+                    }
+                    else if (projectiles[i].damagedObject)
+                    {
+                        print("damagedObject");
+                        DestroyProjectile(projectiles[i]);
+                    }
+                    else if (projectiles[i].wallOnWay)
+                    {
+                        print("wallOnwWAy");
+                        DestroyProjectile(projectiles[i]);
+                    }
                 }
             }
         }
@@ -157,6 +169,7 @@ public class AttackSystem : MonoBehaviour
 
     public void DestroyProjectile(ProjectileEntity projectile)
     {
+        print(projectile);
         for (int i = projectile.dangerousSprites.Count - 1; i >= 0; i --)
         {
             projectile.dangerousSprites[i].SetTrigger("Stop");
@@ -195,7 +208,7 @@ public class AttackSystem : MonoBehaviour
                         proj.wallOnWay = true;
                         proj.deathPosition = proj.dangerousSprites[i].transform.position;
                         wallOnWay = i;
-                        proj.stepsLast = 0;
+                        //proj.stepsLast = 0;
                         proj.dangerousSprites[i].gameObject.SetActive(false);
                     }
                     else if (hit.collider.tag == "Unit" && hit.collider.gameObject != proj.master.gameObject)
@@ -278,10 +291,7 @@ public class AttackSystem : MonoBehaviour
 
             if (!proj.wallOnWay)
                 proj.deathPosition = proj.newPos;
-            if (proj.stepsLast <= 0 || proj.damagedObject)
-            {
-                DestroyProjectile(proj);
-            }
+
             //else
             //    StartCoroutine(CalculateDangerousTiles(proj));
         }

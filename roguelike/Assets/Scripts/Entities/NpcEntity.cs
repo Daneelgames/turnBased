@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class NpcEntity : MonoBehaviour
 {
@@ -18,4 +19,10 @@ public class NpcEntity : MonoBehaviour
     public ProjectileEntity projectileToFire;
 
     public HealthEntity attackTarget;
+    public int size = 1;
+
+    public GameObject canvas;
+    public TextMeshProUGUI tmpHealth;
+    [HideInInspector]
+    public Vector3 canvasOffset;
 }

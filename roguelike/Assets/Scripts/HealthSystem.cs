@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HealthSystem : MonoBehaviour
 {
+    public Transform objectsCanvases;
     public List<Animator> hearts;
     GameManager gm;
 
@@ -14,6 +15,12 @@ public class HealthSystem : MonoBehaviour
         foreach (HealthEntity he in gm.entityList.healthEntities)
         {
             he.healthMax = he.health;
+            if (he.npc)
+            {
+                he.npc.tmpHealth.text = he.health.ToString();
+                he.npc.canvasOffset = he.npc.canvas.transform.localPosition;
+                he.npc.canvas.transform.parent = objectsCanvases;
+            }
         }
     }
 
@@ -22,11 +29,6 @@ public class HealthSystem : MonoBehaviour
         damaged.anim.SetTrigger("Damaged");
         damaged.health--;
 
-        if (damaged == gm.player)
-        {
-            UpdateHearts();
-        }
-
         if (damaged.health <= 0)
         {
             if (attacker == gm.player)
@@ -34,7 +36,25 @@ public class HealthSystem : MonoBehaviour
                 HealEntity(gm.player);
             }
 
+            damaged.health = 0;
             StartCoroutine(Death(damaged));
+        }
+
+        if (damaged.npc)
+        {
+            damaged.npc.canMove = false;
+
+            if (damaged.npc.projectileToFire != null)
+            {
+                gm.attackSystem.DestroyProjectile(damaged.npc.projectileToFire);
+                damaged.npc.projectileToFire = null;
+            }
+            damaged.npc.tmpHealth.text = damaged.health.ToString();
+        }
+
+        if (damaged == gm.player)
+        {
+            UpdateHearts();
         }
     }
 
@@ -46,9 +66,11 @@ public class HealthSystem : MonoBehaviour
 
     IEnumerator Death(HealthEntity he)
     {
+        /*
         gm.entityList.healthEntities.Remove(he);
         if (he.npc)
             gm.entityList.npcEntities.Remove(he.npc);
+            */
 
         he.anim.SetBool("Death", true);
         he.gameObject.layer = 8;
@@ -75,12 +97,10 @@ public class HealthSystem : MonoBehaviour
         {
             if (he.health >= i)
             {
-                print(i);
                 StartCoroutine(SetActive(hearts[i - 1].gameObject, true, 0));
             }
             else
             {
-                print(i);
                 StartCoroutine(SetActive(hearts[i - 1].gameObject, false, 0));
             }
         }

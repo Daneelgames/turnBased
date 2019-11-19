@@ -9,6 +9,8 @@ public class PlayerInput : MonoBehaviour
     [HideInInspector]
     public float movementCooldown = 0;
     public float movementCooldownMax = 0.5f;
+
+    public bool pushObject = true;
     //float timeScaleSmooth = 0.3f;
 
     //float gameSpeed = 1;

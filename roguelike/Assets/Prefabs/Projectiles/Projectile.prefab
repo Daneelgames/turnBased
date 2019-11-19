@@ -61,7 +61,7 @@ MonoBehaviour:
   master: {fileID: 0}
   telegraphTurn: 1
   stepsLast: 2
-  movementSpeed: 8
+  movementSpeed: 3
   direction: {x: 0, y: 0, z: 0}
   wallOnWay: 0
   dangerousSprite: {fileID: 41841164, guid: 6d4188c75c571c74c80a8b1c4c4c7642, type: 3}
