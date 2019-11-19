@@ -37,51 +37,51 @@ public class GameManager : MonoBehaviour
         healthSystem.Init();
         musicGeneratorSystem.Init();
 
-        Step(GameEvent.GameReady);
+        playerInput.playersTurn = true;
     }
 
     private void Update()
     {
-        playerInput._Update();    
+        playerInput._Update();
+        healthSystem._Update();
+        entityList._Update();
     }
 
+    /*
     public void Step(GameEvent lastEvent) 
     {
         switch(lastEvent)
         {
-            case GameEvent.GameReady:
-                playerInput.playersTurn = true;
-                //Invoke("AutoPassTurn", 0.5f);
-                musicGeneratorSystem.Step();
-                break;
-
             case GameEvent.PlayerAct:
                 //CancelInvoke("AutoPassTurn");
+        print("here");
                 attackSystem.TurnOffTelegraphTurns();
                 playerInput.playersTurn = false;
                 // npcs that move are first
+
+                // EXPERIMENTAL:
+                StartCoroutine(attackSystem.NpcAttack());
                 StartCoroutine(attackSystem.MoveProjectiles());
+
                 musicGeneratorSystem.Step();
                 break;
 
             case GameEvent.ProjectilesMove:
                 //attacking are second
-                StartCoroutine(attackSystem.NpcAttack());
+        print("here");
                 break;
 
             case GameEvent.NpcAct:
+        print("here");
                 StartCoroutine(movementSystem.NpcMove());
                 break;
 
             case GameEvent.NpcMove:
+        print("here");
                 playerInput.playersTurn = true;
-                //Invoke("AutoPassTurn", 0.5f);
+                StartCoroutine(movementSystem.NpcMove());
                 break;
         }
     }
-
-    void AutoPassTurn()
-    {
-        Step(GameEvent.PlayerAct);
-    }
+    */
 }

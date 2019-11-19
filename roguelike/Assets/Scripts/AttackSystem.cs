@@ -11,6 +11,8 @@ public class AttackSystem : MonoBehaviour
     string dangerousTag = "Dangerous";
     string untaggedTag = "Untagged";
 
+    
+
     public void Init()
     {
         gm = GameManager.instance;
@@ -50,64 +52,60 @@ public class AttackSystem : MonoBehaviour
         }
     }
 
-    public IEnumerator NpcAttack() // NPC
+    public void NpcAttack(NpcEntity npc) // NPC
     {
-        foreach(NpcEntity npc in gm.entityList.npcEntities)
+        if (npc.health.health <= 0)
         {
-            if (npc.health.health <= 0)
+            // do nothing
+        }
+        else // NPC ACT
+        {
+            gm.movementSystem.SavePosition(npc);
+            var he = npc.health;
+            // enemies attack
+            if (he.npc && he.npc.weaponEntity)
             {
-                // do nothing
-            }
-            else if (npc.shotCooldownCurrent > 0)
-            {
-                npc.shotCooldownCurrent--;
-            }
-            else
-            {
-                gm.movementSystem.SavePosition(npc);
-                var he = npc.health;
-                // enemies attack
-                if (he.npc && he.npc.weaponEntity)
+                he.npc.attackTarget = gm.player;
+
+                if (he.npc.weaponEntity.aimType == WeaponEntity.AimType.Cross)
                 {
-                    he.npc.attackTarget = gm.player;
-
-                    if (he.npc.weaponEntity.aimType == WeaponEntity.AimType.Cross)
+                    if (Mathf.Round(he.transform.position.x) == Mathf.Round(gm.player.transform.position.x) || Mathf.Round(he.transform.position.z) == Mathf.Round(gm.player.transform.position.z))
                     {
-                        if (Mathf.Round(he.transform.position.x) == Mathf.Round(gm.player.transform.position.x) || Mathf.Round(he.transform.position.z) == Mathf.Round(gm.player.transform.position.z))
+                        ProjectileEntity projectile = Instantiate(he.npc.weaponEntity.projectile, he.transform.position, Quaternion.identity);
+                        projectile.master = he;
+
+                        HealthEntity projectileHealth = projectile.GetComponent<HealthEntity>();
+                        projectile.health = projectileHealth;
+                        projectileHealth.proj = projectile;
+
+                        gm.entityList.AddObject(projectileHealth);
+
+                        if (gm.player.transform.position.x > projectile.transform.position.x)
+                            projectile.direction = new Vector3(1, 0, 0);
+                        else if (gm.player.transform.position.x < projectile.transform.position.x)
+                            projectile.direction = new Vector3(-1, 0, 0);
+                        else if (gm.player.transform.position.z < projectile.transform.position.z)
+                            projectile.direction = new Vector3(0, 0, -1);
+                        else if (gm.player.transform.position.z > projectile.transform.position.z)
+                            projectile.direction = new Vector3(0, 0, 1);
+
+                        projectile.newPos = projectile.transform.position;
+                        he.npc.shotCooldownCurrent = he.npc.shotCooldownMax;
+                        projectiles.Add(projectile);
+                        projectile.telegraphTurn = true;
+                        npc.projectileToFire = projectile;
+
+                        for (int i = 0; i <= projectile.movementSpeed; i++)
                         {
-                            ProjectileEntity projectile = Instantiate(he.npc.weaponEntity.projectile, he.transform.position, Quaternion.identity);
-                            projectile.master = he;
-
-                            if (gm.player.transform.position.x > projectile.transform.position.x)
-                                projectile.direction = new Vector3(1, 0, 0);
-                            else if (gm.player.transform.position.x < projectile.transform.position.x)
-                                projectile.direction = new Vector3(-1, 0, 0);
-                            else if (gm.player.transform.position.z < projectile.transform.position.z)
-                                projectile.direction = new Vector3(0, 0, -1);
-                            else if (gm.player.transform.position.z > projectile.transform.position.z)
-                                projectile.direction = new Vector3(0, 0, 1);
-
-                            projectile.newPos = projectile.transform.position;
-                            he.npc.shotCooldownCurrent = he.npc.shotCooldownMax;
-                            projectiles.Add(projectile);
-                            projectile.telegraphTurn = true;
-                            npc.projectileToFire = projectile;
-
-                            for (int i = 0; i <= projectile.movementSpeed; i++)
-                            {
-                                Animator newDangerousSprite = Instantiate(projectile.dangerousSprite, projectile.transform.position, Quaternion.identity);
-                                projectile.dangerousSprites.Add(newDangerousSprite);
-                            }
-                            npc.moveCooldown = 1;
-                            StartCoroutine(CalculateDangerousTiles(projectile));
+                            Animator newDangerousSprite = Instantiate(projectile.dangerousSprite, projectile.transform.position, Quaternion.identity);
+                            projectile.dangerousSprites.Add(newDangerousSprite);
                         }
+                        npc.moveCooldown = 1;
+                        StartCoroutine(CalculateDangerousTiles(projectile));
                     }
                 }
             }
         }
-
-        yield return null;
-        gm.Step(GameManager.GameEvent.NpcAct);
     }
 
     void CheckDamage() 
@@ -169,7 +167,6 @@ public class AttackSystem : MonoBehaviour
 
     public void DestroyProjectile(ProjectileEntity projectile)
     {
-        print(projectile);
         for (int i = projectile.dangerousSprites.Count - 1; i >= 0; i --)
         {
             projectile.dangerousSprites[i].SetTrigger("Stop");
@@ -177,6 +174,7 @@ public class AttackSystem : MonoBehaviour
         }
 
         projectiles.Remove(projectile);
+        gm.entityList.RemoveEntity(projectile.health);
 
         var particles = Instantiate(projectile.deathParticles, projectile.deathPosition, Quaternion.identity);
         Destroy(particles, 2);
@@ -231,42 +229,23 @@ public class AttackSystem : MonoBehaviour
         }
     }
 
-    public IEnumerator MoveProjectiles()
+    public void MoveProjectile(ProjectileEntity proj)
     {
-        for (int i = projectiles.Count - 1; i >= 0; i--)
+        if (!proj.telegraphTurn)
         {
-            if (!projectiles[i].telegraphTurn)
-            {
-                projectiles[i].master.npc.projectileToFire = null;
-                Vector3 newPos = projectiles[i].transform.position + projectiles[i].direction * projectiles[i].movementSpeed;
-                projectiles[i].newPos = newPos;
+            proj.master.npc.projectileToFire = null;
+            Vector3 newPos = proj.transform.position + proj.direction * proj.movementSpeed;
+            proj.newPos = newPos;
 
-                projectiles[i].stepsLast--;
+            proj.stepsLast--;
 
-                StartCoroutine(MoveProjectileOverTime(projectiles[i]));
-            }
-            else
-            {
-                projectiles[i].master.anim.SetTrigger("Attack");
-            }
+            StartCoroutine(MoveProjectileOverTime(proj));
         }
-
-        yield return new WaitForSeconds(0.1f);
-
-        CheckDamage();
-
-        foreach (ProjectileEntity proj in projectiles)
+        else
         {
-            DangerousTilesSetDanger(false, proj);
-
-            // here
-            if (proj.stepsLast > 0 && !proj.damagedObject)
-            {
-                StartCoroutine(CalculateDangerousTiles(proj));
-            }
+            proj.master.anim.SetTrigger("Attack");
+            proj.telegraphTurn = false;
         }
-        yield return new WaitForSeconds(0.1f);
-        gm.Step(GameManager.GameEvent.ProjectilesMove);
     }
 
     IEnumerator MoveProjectileOverTime(ProjectileEntity proj)
@@ -292,8 +271,10 @@ public class AttackSystem : MonoBehaviour
             if (!proj.wallOnWay)
                 proj.deathPosition = proj.newPos;
 
-            //else
-            //    StartCoroutine(CalculateDangerousTiles(proj));
+            if (proj.stepsLast > 0 && !proj.damagedObject)
+            {
+                StartCoroutine(CalculateDangerousTiles(proj));
+            }
         }
     }
 

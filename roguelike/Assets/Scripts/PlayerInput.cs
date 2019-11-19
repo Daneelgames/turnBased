@@ -27,7 +27,8 @@ public class PlayerInput : MonoBehaviour
 
     public void _Update()
     {
-        if (playersTurn && gm.player.health > 0)
+        //if (playersTurn && gm.player.health > 0)
+        if (gm.player.health > 0)
             Movement();
 
         if (Input.GetKeyDown("r"))

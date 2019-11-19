@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1188241750716835368}
   - component: {fileID: 3712388764635513692}
+  - component: {fileID: 6787205353487731553}
   - component: {fileID: 1793039054315410337}
   m_Layer: 0
   m_Name: ProjectileTank
@@ -46,6 +47,24 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.25
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &6787205353487731553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 347516804015421163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de57805d0ffe3404fa04a299ce3bc52a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 1
+  healthMax: 3
+  actionCooldown: 0.5
+  actionCooldownMax: 1
+  npc: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!114 &1793039054315410337
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,6 +12,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyTank Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 1428979093465274701, guid: b93ab726c2299964bb6403e920fc3e28,
+        type: 3}
+      propertyPath: health
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1428979093465274701, guid: b93ab726c2299964bb6403e920fc3e28,
+        type: 3}
+      propertyPath: actionCooldown
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 4442202291268541893, guid: b93ab726c2299964bb6403e920fc3e28,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -67,10 +77,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1428979093465274701, guid: b93ab726c2299964bb6403e920fc3e28,
+    - target: {fileID: 8196681775703842848, guid: b93ab726c2299964bb6403e920fc3e28,
         type: 3}
-      propertyPath: health
-      value: 5
+      propertyPath: m_AnchoredPosition.y
+      value: 2.052
       objectReference: {fileID: 0}
     - target: {fileID: 5236255809405255157, guid: b93ab726c2299964bb6403e920fc3e28,
         type: 3}
@@ -98,10 +108,5 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1793039054315410337, guid: 5693c61cb6e107545a9d2f8fc9a29f0d,
         type: 3}
-    - target: {fileID: 8196681775703842848, guid: b93ab726c2299964bb6403e920fc3e28,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 2.052
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b93ab726c2299964bb6403e920fc3e28, type: 3}

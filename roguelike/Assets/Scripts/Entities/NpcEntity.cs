@@ -10,8 +10,8 @@ public class NpcEntity : MonoBehaviour
     public bool canMove = true;
     public int viewRange = 5; // in tiles
 
-    public int shotCooldownMax = 5;
-    public int shotCooldownCurrent = 5;
+    public float shotCooldownMax = 3;
+    public float shotCooldownCurrent = 3;
     public WeaponEntity weaponEntity;
     public int moveCooldown = 0;
     public Vector3 savedPosition;

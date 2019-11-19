@@ -24,6 +24,10 @@ public class HealthSystem : MonoBehaviour
         }
     }
 
+    public void _Update()
+    {
+    }
+
     public void DamageEntity(HealthEntity damaged, HealthEntity attacker)
     {
         damaged.anim.SetTrigger("Damaged");

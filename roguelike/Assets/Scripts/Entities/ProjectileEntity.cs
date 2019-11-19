@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ProjectileEntity : MonoBehaviour
 {
+    public HealthEntity health;
     [HideInInspector] public HealthEntity master;
     public bool telegraphTurn = true;
     public int stepsLast = 3;

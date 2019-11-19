@@ -36,7 +36,7 @@ public class MovementSystem : MonoBehaviour
             gm.player.transform.LookAt(newPos);
             anim.SetTrigger("Move");
 
-            for (int t = 0; t < 3; t++)
+            for (int t = 0; t < 10; t++)
             {
                 gm.player.transform.position = Vector3.Lerp(gm.player.transform.position, newPos, 0.5f);
                 yield return new WaitForSeconds(0.01f);
@@ -48,7 +48,7 @@ public class MovementSystem : MonoBehaviour
             gm.attackSystem.PlayerMoved(targetObject);
 
             yield return new WaitForSeconds(0.1f);
-            gm.Step(GameManager.GameEvent.PlayerAct);
+            //gm.Step(GameManager.GameEvent.PlayerAct);
         }
         else if (targetObject.layer == 9) // wall
         {
@@ -60,7 +60,7 @@ public class MovementSystem : MonoBehaviour
             gm.CancelInvoke();
             gm.attackSystem.PlayerMoved(targetObject);
             yield return new WaitForSeconds(0.1f);
-            gm.Step(GameManager.GameEvent.PlayerAct);
+            //gm.Step(GameManager.GameEvent.PlayerAct);
         }
     }
 
@@ -127,44 +127,36 @@ public class MovementSystem : MonoBehaviour
         }
     }
 
-    public IEnumerator NpcMove()
+    public void NpcMove(NpcEntity npc)
     {
-        foreach (NpcEntity npc in gm.entityList.npcEntities)
+        if (npc.health.health > 0)
         {
-            if (npc.health.health > 0)
+            SavePosition(npc);
+            if (npc.canMove && npc.projectileToFire == null)
             {
-                SavePosition(npc);
-                if (npc.canMove && npc.projectileToFire == null)
+                if (npc.moveCooldown > 0)
+                    npc.moveCooldown--;
+                else
                 {
-                    if (npc.moveCooldown > 0)
-                        npc.moveCooldown--;
-                    else
-                    {
-                        Vector3 newPos = npc.transform.position + RandomDirection();
-                        GameObject targetObj = CanMove(newPos);
+                    Vector3 newPos = npc.transform.position + RandomDirection();
+                    GameObject targetObj = CanMove(newPos);
 
-                        if (targetObj != null && targetObj.layer == 8) // tile
-                        {
-                            SavePosition(npc);
-                            npc.transform.LookAt(newPos);
-                            npc.health.anim.SetTrigger("Move");
-                            StartCoroutine(NpcMoveSmooth(npc, newPos));
-                        }
+                    if (targetObj != null && targetObj.layer == 8 && targetObj.layer != 10) // tile and not unit
+                    {
+                        SavePosition(npc);
+                        npc.transform.LookAt(newPos);
+                        npc.health.anim.SetTrigger("Move");
+                        StartCoroutine(NpcMoveSmooth(npc, newPos));
                     }
                 }
-
-                npc.canMove = true;
             }
+            npc.canMove = true;
         }
-
-        yield return null;
-
-        gm.Step(GameManager.GameEvent.NpcMove);
     }
 
     IEnumerator NpcMoveSmooth(NpcEntity npc, Vector3 newPos)
     {
-        for (int t = 0; t < 9; t++)
+        for (int t = 0; t < 10; t++)
         {
             npc.transform.position = Vector3.Lerp(npc.transform.position, newPos, 0.5f);
             npc.canvas.transform.position = npc.transform.position + npc.canvasOffset;
