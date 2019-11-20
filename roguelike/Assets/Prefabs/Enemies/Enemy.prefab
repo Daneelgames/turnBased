@@ -281,7 +281,7 @@ Transform:
   m_GameObject: {fileID: 3547870528189207247}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
+  m_LocalScale: {x: 0.9, y: 1, z: 0.9}
   m_Children: []
   m_Father: {fileID: 4442202290637410985}
   m_RootOrder: 0
@@ -460,6 +460,8 @@ MonoBehaviour:
   size: 1
   canvas: {fileID: 2861697584028511625}
   tmpHealth: {fileID: 6191397378627008823}
+  canvasOffset: {x: 0, y: 0, z: 0}
+  wantedTarget: {fileID: 0}
 --- !u!114 &1882502294431310215
 MonoBehaviour:
   m_ObjectHideFlags: 0

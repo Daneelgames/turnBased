@@ -24,7 +24,6 @@ public class LevelGenerator : MonoBehaviour
         {
             for (int z = 0; z < grid.transform.localScale.z; z++)
             {
-                print(x);
                 newPos = new Vector3(grid.transform.position.x + x, 0, grid.transform.position.z - z);
                 go = Instantiate(floorTilePrefab, newPos, Quaternion.identity);
                 go.transform.parent = tilesParent;
