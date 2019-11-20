@@ -41,6 +41,7 @@ public class MovementSystem : MonoBehaviour
                 gm.player.transform.position = Vector3.Lerp(gm.player.transform.position, newPos, 0.5f);
                 yield return new WaitForSeconds(0.01f);
             }
+
             gm.player.transform.position = newPos;
             gm.player.transform.position = new Vector3(Mathf.Round(gm.player.transform.position.x), Mathf.Round(gm.player.transform.position.y), Mathf.Round(gm.player.transform.position.z));
             currentPosition = gm.player.transform.position;
@@ -145,10 +146,27 @@ public class MovementSystem : MonoBehaviour
 
                         if (targetObj != null && targetObj.layer == 8) // tile
                         {
-                            SavePosition(npc);
-                            npc.transform.LookAt(newPos);
-                            npc.health.anim.SetTrigger("Move");
-                            StartCoroutine(NpcMoveSmooth(npc, newPos));
+                            // check if no other unit wants to move here
+                            bool canMoveThere = true;
+
+                            foreach (NpcEntity n in gm.entityList.npcEntities)
+                            {
+                                if (n.wantedTarget != null && n.wantedTarget == targetObj)
+                                {
+                                    print(targetObj.name + " == " + n.wantedTarget.gameObject.name);
+                                    canMoveThere = false;
+                                    break;
+                                }
+                            }
+
+                            if (canMoveThere)
+                            {
+                                npc.wantedTarget = targetObj;
+                                SavePosition(npc);
+                                npc.transform.LookAt(newPos);
+                                npc.health.anim.SetTrigger("Move");
+                                StartCoroutine(NpcMoveSmooth(npc, newPos));
+                            }
                         }
                     }
                 }
@@ -171,6 +189,7 @@ public class MovementSystem : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
         npc.transform.position = newPos;
+        yield return new WaitForSeconds(0.1f);
 
         SavePosition(npc);
     }

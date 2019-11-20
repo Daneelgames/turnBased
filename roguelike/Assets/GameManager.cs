@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public AttackSystem attackSystem;
     [HideInInspector] public HealthSystem healthSystem;
     [HideInInspector] public MusicGeneratorSystem musicGeneratorSystem;
+    [HideInInspector] public LevelGenerator levelGenerator;
     public HealthEntity player;
 
     [HideInInspector] public EntityList entityList;
@@ -25,11 +26,13 @@ public class GameManager : MonoBehaviour
         attackSystem = GetComponent<AttackSystem>();
         healthSystem = GetComponent<HealthSystem>();
         musicGeneratorSystem = GetComponentInChildren<MusicGeneratorSystem>();
+        levelGenerator = GetComponent<LevelGenerator>();
         Init();
     }
 
     void Init()
     {
+        levelGenerator.Init();
         playerInput.Init();
         entityList.Init();
         movementSystem.Init();

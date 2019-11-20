@@ -145,21 +145,16 @@ public class AttackSystem : MonoBehaviour
                         gm.healthSystem.DamageEntity(damaged, projectiles[i].master);
                         projectiles[i].damagedObject = damaged;
                         projectiles[i].deathPosition = damaged.transform.position;
-                    }
 
-                    if (projectiles[i].stepsLast <= 0)
-                    {
-                        print("stepLast");
                         DestroyProjectile(projectiles[i]);
                     }
-                    else if (projectiles[i].damagedObject)
+                    else if (projectiles[i].stepsLast <= 0)
                     {
-                        print("damagedObject");
+                        projectiles[i].deathPosition = projectiles[i].dangerousSprites[projectiles[i].dangerousSprites.Count - 1].transform.position;
                         DestroyProjectile(projectiles[i]);
                     }
                     else if (projectiles[i].wallOnWay)
                     {
-                        print("wallOnwWAy");
                         DestroyProjectile(projectiles[i]);
                     }
                 }
@@ -169,10 +164,10 @@ public class AttackSystem : MonoBehaviour
 
     public void DestroyProjectile(ProjectileEntity projectile)
     {
-        print(projectile);
+        StopCoroutine(CalculateDangerousTiles(projectile));
         for (int i = projectile.dangerousSprites.Count - 1; i >= 0; i --)
         {
-            projectile.dangerousSprites[i].SetTrigger("Stop");
+            projectile.dangerousSprites[i].SetBool("Active", false);
             Destroy(projectile.dangerousSprites[i].gameObject, 1f);
         }
 
@@ -180,7 +175,7 @@ public class AttackSystem : MonoBehaviour
 
         var particles = Instantiate(projectile.deathParticles, projectile.deathPosition, Quaternion.identity);
         Destroy(particles, 2);
-        Destroy(projectile.gameObject);
+        Destroy(projectile.gameObject, 0.1f);
     }
 
     IEnumerator CalculateDangerousTiles(ProjectileEntity proj)
@@ -217,14 +212,15 @@ public class AttackSystem : MonoBehaviour
                     }
                 }
             }
+            else proj.dangerousSprites[i].gameObject.SetActive(false);
         }
-
 
         for (int i = 0; i < proj.dangerousSprites.Count; i++)
         {
             if (wallOnWay > i)
             {
                 proj.dangerousSprites[i].gameObject.SetActive(true);
+                proj.dangerousSprites[i].SetBool("Active", true);
                 proj.dangerousSprites[i].SetTrigger("Reset");
                 yield return new WaitForSeconds(0.1f);
             }
@@ -258,12 +254,14 @@ public class AttackSystem : MonoBehaviour
         foreach (ProjectileEntity proj in projectiles)
         {
             DangerousTilesSetDanger(false, proj);
-
+            StartCoroutine(CalculateDangerousTiles(proj));
+            /*
             // here
             if (proj.stepsLast > 0 && !proj.damagedObject)
             {
                 StartCoroutine(CalculateDangerousTiles(proj));
             }
+            */
         }
         yield return new WaitForSeconds(0.1f);
         gm.Step(GameManager.GameEvent.ProjectilesMove);

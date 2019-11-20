@@ -25,4 +25,6 @@ public class NpcEntity : MonoBehaviour
     public TextMeshProUGUI tmpHealth;
     [HideInInspector]
     public Vector3 canvasOffset;
+
+    public GameObject wantedTarget;
 }
