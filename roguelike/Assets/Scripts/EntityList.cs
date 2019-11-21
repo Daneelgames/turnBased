@@ -23,6 +23,15 @@ public class EntityList : MonoBehaviour
                 obj.npc.health = obj;
                 npcEntities.Add(obj.npc);
             }
+
+            foreach (FloorTileEntity floor in gm.levelGenerator.floorTiles)
+            {
+                if (Vector3.Distance(floor.transform.position, obj.transform.position) < 0.5f)
+                {
+                    obj.tile = floor;
+                    break;
+                }
+            }
         }
     }
 }

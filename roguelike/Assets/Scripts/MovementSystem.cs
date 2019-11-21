@@ -18,6 +18,17 @@ public class MovementSystem : MonoBehaviour
         anim = gm.player.GetComponent<Animator>();
     }
 
+    void SetNewTileToEntity(HealthEntity he, FloorTileEntity tile)
+    {
+        if (he.tile != null)
+        {
+            he.tile.objectsOnTile.Remove(he);
+        }
+
+        he.tile = tile;
+        he.tile.objectsOnTile.Add(he);
+    }
+
     public IEnumerator Move(Vector3 add, bool findClosestPoint)
     {
         Vector3 newPos = currentPosition + add;
@@ -35,6 +46,17 @@ public class MovementSystem : MonoBehaviour
             gm.player.transform.position = currentPosition;
             gm.player.transform.LookAt(newPos);
             anim.SetTrigger("Move");
+
+            foreach (FloorTileEntity f in gm.levelGenerator.floorTiles)
+            {
+                if (f.gameObject == targetObject)
+                {
+                    SetNewTileToEntity(gm.player, f);
+                    break;
+                }
+            }
+
+            gm.playerFovSystem.CalculateFov();
 
             for (int t = 0; t < 3; t++)
             {
@@ -105,6 +127,14 @@ public class MovementSystem : MonoBehaviour
         {
             if (targetObj.layer == 8) // tile
             {
+                foreach(FloorTileEntity floor in gm.levelGenerator.floorTiles)
+                {
+                    if (floor.gameObject == targetObj)
+                    {
+                        SetNewTileToEntity(he, floor);
+                    }
+                }
+
                 SavePosition(he.npc);
                 he.transform.LookAt(newPos);
                 //he.anim.SetTrigger("Move"); //animate damaged push
@@ -161,6 +191,15 @@ public class MovementSystem : MonoBehaviour
 
                             if (canMoveThere)
                             {
+                                foreach (FloorTileEntity f in gm.levelGenerator.floorTiles)
+                                {
+                                    if (f.gameObject == targetObj)
+                                    {
+                                        SetNewTileToEntity(npc.health, f);
+                                        break;
+                                    }
+                                }
+
                                 npc.wantedTarget = targetObj;
                                 SavePosition(npc);
                                 npc.transform.LookAt(newPos);

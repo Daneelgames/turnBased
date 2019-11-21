@@ -9,4 +9,6 @@ public class HealthEntity : MonoBehaviour
 
     [HideInInspector] public NpcEntity npc;
     [HideInInspector] public Animator anim;
+
+    public FloorTileEntity tile;
 }

@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public HealthSystem healthSystem;
     [HideInInspector] public MusicGeneratorSystem musicGeneratorSystem;
     [HideInInspector] public LevelGenerator levelGenerator;
+    [HideInInspector] public PlayerFovSystem playerFovSystem;
     public HealthEntity player;
 
     [HideInInspector] public EntityList entityList;
@@ -27,6 +28,7 @@ public class GameManager : MonoBehaviour
         healthSystem = GetComponent<HealthSystem>();
         musicGeneratorSystem = GetComponentInChildren<MusicGeneratorSystem>();
         levelGenerator = GetComponent<LevelGenerator>();
+        playerFovSystem = GetComponent<PlayerFovSystem>();
         Init();
     }
 
@@ -39,6 +41,7 @@ public class GameManager : MonoBehaviour
         attackSystem.Init();
         healthSystem.Init();
         musicGeneratorSystem.Init();
+        playerFovSystem.Init();
 
         Step(GameEvent.GameReady);
     }
