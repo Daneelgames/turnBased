@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public MusicGeneratorSystem musicGeneratorSystem;
     [HideInInspector] public LevelGenerator levelGenerator;
     [HideInInspector] public PlayerFovSystem playerFovSystem;
+    public EntityInDangerSystem entityInDangerSystem;
     public HealthEntity player;
 
     [HideInInspector] public EntityList entityList;
@@ -42,6 +43,7 @@ public class GameManager : MonoBehaviour
         healthSystem.Init();
         musicGeneratorSystem.Init();
         playerFovSystem.Init();
+        entityInDangerSystem.Init();
 
         Step(GameEvent.GameReady);
     }
@@ -68,6 +70,7 @@ public class GameManager : MonoBehaviour
                 // npcs that move are first
                 StartCoroutine(attackSystem.MoveProjectiles());
                 musicGeneratorSystem.Step();
+                entityInDangerSystem.HideAllMarks();
                 break;
 
             case GameEvent.ProjectilesMove:

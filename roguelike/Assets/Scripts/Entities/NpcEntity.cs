@@ -21,10 +21,7 @@ public class NpcEntity : MonoBehaviour
     public HealthEntity attackTarget;
     public int size = 1;
 
-    public Animator canvas;
     public TextMeshProUGUI tmpHealth;
-    [HideInInspector]
-    public Vector3 canvasOffset;
 
     public GameObject wantedTarget;
 }

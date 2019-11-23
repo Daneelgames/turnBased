@@ -208,7 +208,10 @@ public class AttackSystem : MonoBehaviour
                     }
                     else if (hit.collider.tag == "Unit" && hit.collider.gameObject != proj.master.gameObject)
                     {
-
+                        HealthEntity he = hit.collider.gameObject.GetComponent<HealthEntity>();
+                        proj.deathPosition = proj.dangerousSprites[i].transform.position;
+                        wallOnWay = i;
+                        gm.entityInDangerSystem.CallMark(he);
                     }
                 }
             }
@@ -229,41 +232,45 @@ public class AttackSystem : MonoBehaviour
 
     public IEnumerator MoveProjectiles()
     {
-        for (int i = projectiles.Count - 1; i >= 0; i--)
+        if (gm.attackSystem.projectiles.Count > 0)
         {
-            if (!projectiles[i].telegraphTurn)
+            for (int i = projectiles.Count - 1; i >= 0; i--)
             {
-                projectiles[i].master.npc.projectileToFire = null;
-                Vector3 newPos = projectiles[i].transform.position + projectiles[i].direction * projectiles[i].movementSpeed;
-                projectiles[i].newPos = newPos;
+                if (!projectiles[i].telegraphTurn)
+                {
+                    projectiles[i].master.npc.projectileToFire = null;
+                    Vector3 newPos = projectiles[i].transform.position + projectiles[i].direction * projectiles[i].movementSpeed;
+                    projectiles[i].newPos = newPos;
 
-                projectiles[i].stepsLast--;
+                    projectiles[i].stepsLast--;
 
-                StartCoroutine(MoveProjectileOverTime(projectiles[i]));
+                    StartCoroutine(MoveProjectileOverTime(projectiles[i]));
+                }
+                else
+                {
+                    projectiles[i].master.anim.SetTrigger("Attack");
+                }
             }
-            else
+            yield return new WaitForSeconds(0.15f);
+
+            CheckDamage();
+
+            foreach (ProjectileEntity proj in projectiles)
             {
-                projectiles[i].master.anim.SetTrigger("Attack");
-            }
-        }
-
-        yield return new WaitForSeconds(0.1f);
-
-        CheckDamage();
-
-        foreach (ProjectileEntity proj in projectiles)
-        {
-            DangerousTilesSetDanger(false, proj);
-            StartCoroutine(CalculateDangerousTiles(proj));
-            /*
-            // here
-            if (proj.stepsLast > 0 && !proj.damagedObject)
-            {
+                DangerousTilesSetDanger(false, proj);
                 StartCoroutine(CalculateDangerousTiles(proj));
+                /*
+                // here
+                if (proj.stepsLast > 0 && !proj.damagedObject)
+                {
+                    StartCoroutine(CalculateDangerousTiles(proj));
+                }
+                */
             }
-            */
+
+
+            yield return new WaitForSeconds(0.15f);
         }
-        yield return new WaitForSeconds(0.1f);
         gm.Step(GameManager.GameEvent.ProjectilesMove);
     }
 
@@ -273,7 +280,7 @@ public class AttackSystem : MonoBehaviour
         if (proj.damagedObject) newPos = proj.damagedObject.transform.position;
         else if (proj.wallOnWay) newPos = proj.deathPosition;
 
-        for (int t = 0; t < 8; t++)
+        for (int t = 0; t < 10; t++)
         {
             if (proj != null)
             {

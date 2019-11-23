@@ -25,7 +25,6 @@ public class PlayerFovSystem : MonoBehaviour
                 tile.transform.position - gm.player.tile.transform.position, out hit,
                 Vector3.Distance(gm.player.tile.transform.position, tile.transform.position), fovMask))
                 {
-                    print("here");
                     if (hit.collider.gameObject)
                     {
                         tile.visible = false;
@@ -52,7 +51,7 @@ public class PlayerFovSystem : MonoBehaviour
 
     public void HideObject(HealthEntity he, bool hide)
     {
-        if (he.npc) he.npc.canvas.gameObject.SetActive(!hide);
+        he.canvas.gameObject.SetActive(!hide);
 
         he.anim.SetBool("Hidden", hide);
     }

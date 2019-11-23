@@ -87,16 +87,19 @@ public class MovementSystem : MonoBehaviour
             for (int t = 0; t < 3; t++)
             {
                 gm.player.transform.position = Vector3.Lerp(gm.player.transform.position, newPos, 0.5f);
+                gm.player.canvas.transform.position = gm.player.transform.position + gm.player.canvasOffset;
                 yield return new WaitForSeconds(0.01f);
             }
 
             gm.player.transform.position = newPos;
             gm.player.transform.position = new Vector3(Mathf.Round(gm.player.transform.position.x), Mathf.Round(gm.player.transform.position.y), Mathf.Round(gm.player.transform.position.z));
+            gm.player.canvas.transform.position = gm.player.transform.position + gm.player.canvasOffset;
             currentPosition = gm.player.transform.position;
 
             gm.attackSystem.PlayerMoved(targetObject);
 
             //yield return new WaitForSeconds(0.1f);
+        print("hide all marks");
             gm.Step(GameManager.GameEvent.PlayerAct);
         }
         else if (targetObject.layer == 9) // wall
@@ -250,7 +253,7 @@ public class MovementSystem : MonoBehaviour
         for (int t = 0; t < 9; t++)
         {
             npc.transform.position = Vector3.Lerp(npc.transform.position, newPos, 0.5f);
-            npc.canvas.transform.position = npc.transform.position + npc.canvasOffset;
+            npc.health.canvas.transform.position = npc.health.transform.position + npc.health.canvasOffset;
             yield return new WaitForSeconds(0.01f);
         }
         npc.transform.position = newPos;

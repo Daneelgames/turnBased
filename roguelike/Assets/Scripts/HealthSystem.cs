@@ -18,9 +18,10 @@ public class HealthSystem : MonoBehaviour
             if (he.npc)
             {
                 he.npc.tmpHealth.text = he.health.ToString();
-                he.npc.canvasOffset = he.npc.canvas.transform.localPosition;
-                he.npc.canvas.transform.parent = objectsCanvases;
             }
+            Vector3 canvasOffset = he.canvas.transform.localPosition;
+            he.canvasOffset = canvasOffset;
+            he.canvas.transform.parent = objectsCanvases;
         }
     }
 
@@ -66,12 +67,6 @@ public class HealthSystem : MonoBehaviour
 
     IEnumerator Death(HealthEntity he)
     {
-        /*
-        gm.entityList.healthEntities.Remove(he);
-        if (he.npc)
-            gm.entityList.npcEntities.Remove(he.npc);
-            */
-
         he.anim.SetBool("Death", true);
         he.gameObject.layer = 8;
 
