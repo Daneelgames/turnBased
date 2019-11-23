@@ -81,6 +81,7 @@ public class GameManager : MonoBehaviour
 
             case GameEvent.NpcMove:
                 playerInput.playersTurn = true;
+                playerFovSystem.CalculateFov();
                 //Invoke("AutoPassTurn", 0.5f);
                 break;
         }

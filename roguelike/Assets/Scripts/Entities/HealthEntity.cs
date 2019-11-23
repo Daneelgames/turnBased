@@ -11,4 +11,5 @@ public class HealthEntity : MonoBehaviour
     [HideInInspector] public Animator anim;
 
     public FloorTileEntity tile;
+
 }

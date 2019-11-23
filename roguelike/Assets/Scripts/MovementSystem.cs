@@ -16,6 +16,23 @@ public class MovementSystem : MonoBehaviour
         gm = GameManager.instance;
         currentPosition = gm.player.transform.position;
         anim = gm.player.GetComponent<Animator>();
+
+        InitialPositions();
+    }
+
+    void InitialPositions()
+    {
+        foreach (HealthEntity he in gm.entityList.healthEntities)
+        {
+            foreach (FloorTileEntity tile in gm.levelGenerator.floorTiles)
+            {
+                if (Vector3.Distance(he.transform.position, tile.transform.position) < 0.5f)
+                {
+                    SetNewTileToEntity(he, tile);
+                    break;
+                }
+            }
+        }
     }
 
     void SetNewTileToEntity(HealthEntity he, FloorTileEntity tile)
@@ -27,6 +44,15 @@ public class MovementSystem : MonoBehaviour
 
         he.tile = tile;
         he.tile.objectsOnTile.Add(he);
+
+        if (!he.tile.visible)
+        {
+            gm.playerFovSystem.HideObject(he, true);
+        }
+        else
+        {
+            gm.playerFovSystem.HideObject(he, false);
+        }
     }
 
     public IEnumerator Move(Vector3 add, bool findClosestPoint)
@@ -70,7 +96,7 @@ public class MovementSystem : MonoBehaviour
 
             gm.attackSystem.PlayerMoved(targetObject);
 
-            yield return new WaitForSeconds(0.1f);
+            //yield return new WaitForSeconds(0.1f);
             gm.Step(GameManager.GameEvent.PlayerAct);
         }
         else if (targetObject.layer == 9) // wall
@@ -82,7 +108,7 @@ public class MovementSystem : MonoBehaviour
         {
             gm.CancelInvoke();
             gm.attackSystem.PlayerMoved(targetObject);
-            yield return new WaitForSeconds(0.1f);
+            //yield return new WaitForSeconds(0.1f);
             gm.Step(GameManager.GameEvent.PlayerAct);
         }
     }
@@ -228,7 +254,7 @@ public class MovementSystem : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
         }
         npc.transform.position = newPos;
-        yield return new WaitForSeconds(0.1f);
+        //yield return new WaitForSeconds(0.1f);
 
         SavePosition(npc);
     }

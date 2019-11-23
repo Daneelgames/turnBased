@@ -12,11 +12,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemySwarm Variant
       objectReference: {fileID: 0}
-    - target: {fileID: 1428979093465274701, guid: b93ab726c2299964bb6403e920fc3e28,
-        type: 3}
-      propertyPath: health
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4442202291268541893, guid: b93ab726c2299964bb6403e920fc3e28,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -82,6 +77,11 @@ PrefabInstance:
       propertyPath: m_fontSizeBase
       value: 6.68
       objectReference: {fileID: 0}
+    - target: {fileID: 1428979093465274701, guid: b93ab726c2299964bb6403e920fc3e28,
+        type: 3}
+      propertyPath: health
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8196681775703842848, guid: b93ab726c2299964bb6403e920fc3e28,
         type: 3}
       propertyPath: m_LocalPosition.z
@@ -138,5 +138,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1793039054315410337, guid: af7e9968a2e52e147925cd587f30e018,
         type: 3}
+    - target: {fileID: 8335560651460323902, guid: b93ab726c2299964bb6403e920fc3e28,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.52742
+      objectReference: {fileID: 0}
+    - target: {fileID: 8335560651460323902, guid: b93ab726c2299964bb6403e920fc3e28,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.52742
+      objectReference: {fileID: 0}
+    - target: {fileID: 8335560651460323902, guid: b93ab726c2299964bb6403e920fc3e28,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.52742
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b93ab726c2299964bb6403e920fc3e28, type: 3}
