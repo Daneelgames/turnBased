@@ -71,6 +71,7 @@ MonoBehaviour:
     type: 3}
   damagedObject: {fileID: 0}
   deathPosition: {x: 0, y: 0, z: 0}
+  visual: {fileID: 7753530755268303577}
 --- !u!1 &7753530755268303577
 GameObject:
   m_ObjectHideFlags: 0

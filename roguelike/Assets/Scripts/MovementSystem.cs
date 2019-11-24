@@ -70,7 +70,6 @@ public class MovementSystem : MonoBehaviour
             gm.playerInput.movementCooldown = gm.playerInput.movementCooldownMax;
 
             gm.player.transform.position = currentPosition;
-            gm.player.transform.LookAt(newPos);
             anim.SetTrigger("Move");
 
             foreach (FloorTileEntity f in gm.levelGenerator.floorTiles)
@@ -165,7 +164,6 @@ public class MovementSystem : MonoBehaviour
                 }
 
                 SavePosition(he.npc);
-                he.transform.LookAt(newPos);
                 //he.anim.SetTrigger("Move"); //animate damaged push
                 StartCoroutine(NpcMoveSmooth(he.npc, newPos));
             }
@@ -231,7 +229,6 @@ public class MovementSystem : MonoBehaviour
 
                                 npc.wantedTarget = targetObj;
                                 SavePosition(npc);
-                                npc.transform.LookAt(newPos);
                                 npc.health.anim.SetTrigger("Move");
                                 StartCoroutine(NpcMoveSmooth(npc, newPos));
                             }

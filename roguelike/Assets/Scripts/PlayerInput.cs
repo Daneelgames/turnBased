@@ -67,6 +67,7 @@ public class PlayerInput : MonoBehaviour
             {
                 StopCoroutine(gm.movementSystem.Move(Vector3.zero, false));
                 StartCoroutine(gm.movementSystem.Move(new Vector3(1, 0, 0), false));
+                gm.player.spr.flipX = false;
                 /*
                 if (gameSpeed < 1.5f) gameSpeed += Time.deltaTime * 10;
                 if (timeScaleSmooth < 0.75)
@@ -89,6 +90,7 @@ public class PlayerInput : MonoBehaviour
             {
                 StopCoroutine(gm.movementSystem.Move(Vector3.zero, false));
                 StartCoroutine(gm.movementSystem.Move(new Vector3(-1, 0, 0), false));
+                gm.player.spr.flipX = true;
                 /*
                 if (gameSpeed < 1.5f) gameSpeed += Time.deltaTime * 10;
                 if (timeScaleSmooth < 0.75)

@@ -76,6 +76,7 @@ public class AttackSystem : MonoBehaviour
                         if (Mathf.Round(he.transform.position.x) == Mathf.Round(gm.player.transform.position.x) || Mathf.Round(he.transform.position.z) == Mathf.Round(gm.player.transform.position.z))
                         {
                             ProjectileEntity projectile = Instantiate(he.npc.weaponEntity.projectile, he.transform.position, Quaternion.identity);
+                            projectile.visual.SetActive(false);
                             projectile.master = he;
 
                             if (gm.player.transform.position.x > projectile.transform.position.x)
@@ -240,6 +241,7 @@ public class AttackSystem : MonoBehaviour
             {
                 if (!projectiles[i].telegraphTurn)
                 {
+                    if (!projectiles[i].visual.activeInHierarchy) projectiles[i].visual.SetActive(true);
                     projectiles[i].master.npc.projectileToFire = null;
                     Vector3 newPos = projectiles[i].transform.position + projectiles[i].direction * projectiles[i].movementSpeed;
                     projectiles[i].newPos = newPos;

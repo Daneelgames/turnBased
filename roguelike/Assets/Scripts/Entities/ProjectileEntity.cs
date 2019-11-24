@@ -18,4 +18,6 @@ public class ProjectileEntity : MonoBehaviour
     public GameObject deathParticles;
     public HealthEntity damagedObject;
     public Vector3 deathPosition;
+
+    public GameObject visual;
 }

@@ -14,4 +14,6 @@ public class HealthEntity : MonoBehaviour
     public Canvas canvas;
     public Animator inDangerFeedback;
     public Vector3 canvasOffset;
+
+    public SpriteRenderer spr;
 }
