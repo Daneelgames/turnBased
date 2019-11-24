@@ -210,8 +210,10 @@ public class AttackSystem : MonoBehaviour
                     {
                         HealthEntity he = hit.collider.gameObject.GetComponent<HealthEntity>();
                         proj.deathPosition = proj.dangerousSprites[i].transform.position;
-                        wallOnWay = i;
-                        gm.entityInDangerSystem.CallMark(he);
+                        //wallOnWay = i;
+
+                        if (he.health > 00)
+                            gm.entityInDangerSystem.CallMark(he);
                     }
                 }
             }

@@ -23,14 +23,7 @@ public class EntityInDangerSystem : MonoBehaviour
     {
         foreach (HealthEntity he in gm.entityList.healthEntities)
         {
-
+            he.inDangerFeedback.SetBool("Active", false);
         }
-    }
-
-    IEnumerator HideMark(DangerMark mark)
-    {
-        mark.anim.SetBool("Active", false);
-        yield return new WaitForSeconds(5f);
-        mark.gameObject.SetActive(false);
     }
 }

@@ -13,6 +13,5 @@ public class HealthEntity : MonoBehaviour
     public FloorTileEntity tile;
     public Canvas canvas;
     public Animator inDangerFeedback;
-    [HideInInspector]
     public Vector3 canvasOffset;
 }

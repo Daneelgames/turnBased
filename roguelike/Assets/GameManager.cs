@@ -65,12 +65,12 @@ public class GameManager : MonoBehaviour
 
             case GameEvent.PlayerAct:
                 //CancelInvoke("AutoPassTurn");
+                entityInDangerSystem.HideAllMarks();
                 attackSystem.TurnOffTelegraphTurns();
                 playerInput.playersTurn = false;
                 // npcs that move are first
                 StartCoroutine(attackSystem.MoveProjectiles());
                 musicGeneratorSystem.Step();
-                entityInDangerSystem.HideAllMarks();
                 break;
 
             case GameEvent.ProjectilesMove:

@@ -19,9 +19,9 @@ public class HealthSystem : MonoBehaviour
             {
                 he.npc.tmpHealth.text = he.health.ToString();
             }
-            Vector3 canvasOffset = he.canvas.transform.localPosition;
+            Vector3 canvasOffset = he.canvas.transform.parent.transform.localPosition;
             he.canvasOffset = canvasOffset;
-            he.canvas.transform.parent = objectsCanvases;
+            he.canvas.transform.parent.transform.parent = objectsCanvases;
         }
     }
 
