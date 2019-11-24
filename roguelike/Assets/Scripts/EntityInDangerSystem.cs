@@ -17,6 +17,7 @@ public class EntityInDangerSystem : MonoBehaviour
     public void CallMark(HealthEntity target)
     {
         target.inDangerFeedback.SetBool("Active", true);
+        target.inDangerFeedback.SetBool("Active.persist", true);
     }
 
     public void HideAllMarks()
@@ -24,6 +25,7 @@ public class EntityInDangerSystem : MonoBehaviour
         foreach (HealthEntity he in gm.entityList.healthEntities)
         {
             he.inDangerFeedback.SetBool("Active", false);
+            he.inDangerFeedback.SetBool("Active.persist", false);
         }
     }
 }

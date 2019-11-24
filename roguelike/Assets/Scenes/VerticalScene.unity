@@ -2209,6 +2209,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6503023965653223577, guid: c1961b54552c44d42943db9c49c8205a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2076498406, guid: c1961b54552c44d42943db9c49c8205a, type: 3}
       propertyPath: m_LocalPosition.z
       value: -0.396
@@ -2221,6 +2226,11 @@ PrefabInstance:
       propertyPath: m_FlipX
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2076498407, guid: c1961b54552c44d42943db9c49c8205a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 3fbab0bc9d2eea54e87789a9b3f83372,
+        type: 3}
     - target: {fileID: 6903930193060288332, guid: c1961b54552c44d42943db9c49c8205a,
         type: 3}
       propertyPath: m_LocalScale.y

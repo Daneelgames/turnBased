@@ -228,7 +228,7 @@ public class AttackSystem : MonoBehaviour
                 proj.dangerousSprites[i].gameObject.SetActive(true);
                 proj.dangerousSprites[i].SetBool("Active", true);
                 proj.dangerousSprites[i].SetTrigger("Reset");
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(0.03f);
             }
         }
     }
