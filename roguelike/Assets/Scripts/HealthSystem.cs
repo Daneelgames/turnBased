@@ -68,9 +68,19 @@ public class HealthSystem : MonoBehaviour
     IEnumerator Death(HealthEntity he)
     {
         he.anim.SetBool("Death", true);
-        he.gameObject.layer = 8;
+        he.gameObject.GetComponent<Collider>().enabled = false;
+        yield return new WaitForSeconds(1);
+        gm.entityList.healthEntities.Remove(he);
 
-        yield return null;
+        if (he.npc)
+            gm.entityList.npcEntities.Remove(he.npc);
+
+        if (he.canvas)
+            Destroy(he.canvas.gameObject);
+
+        he.tile.objectsOnTile.Remove(he);
+
+        Destroy(he.gameObject);
     }
 
     void HealEntity(HealthEntity he)

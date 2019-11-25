@@ -25,12 +25,9 @@ public class PlayerFovSystem : MonoBehaviour
                 tile.transform.position - gm.player.tile.transform.position, out hit,
                 Vector3.Distance(gm.player.tile.transform.position, tile.transform.position), fovMask))
                 {
-                    if (hit.collider.gameObject)
-                    {
-                        tile.visible = false;
-                        tile.fog.SetBool("Active", true);
-                        SetActiveObjects(tile, false);
-                    }
+                    tile.visible = false;
+                    tile.fog.SetBool("Active", true);
+                    SetActiveObjects(tile, false);
                 }
             else
             {
@@ -53,6 +50,7 @@ public class PlayerFovSystem : MonoBehaviour
     {
         he.canvas.gameObject.SetActive(!hide);
 
-        he.anim.SetBool("Hidden", hide);
+        if (he.anim)
+            he.anim.SetBool("Hidden", hide);
     }
 }
