@@ -67,7 +67,7 @@ public class AttackSystem : MonoBehaviour
                 gm.movementSystem.SavePosition(npc);
                 var he = npc.health;
                 // enemies attack
-                if (he.npc && he.npc.weaponEntity)
+                if (he.npc && he.npc.weaponEntity && he.tile.transform.position.z <= gm.player.tile.transform.position.z + 4 && he.tile.transform.position.z >= gm.player.tile.transform.position.z - 3)
                 {
                     he.npc.attackTarget = gm.player;
 
@@ -122,7 +122,7 @@ public class AttackSystem : MonoBehaviour
                     HealthEntity damaged = null;
                     foreach (Animator tile in projectiles[i].dangerousSprites)
                     {
-                        if (tile.gameObject.tag == dangerousTag)
+                        if (tile.gameObject.activeInHierarchy && tile.gameObject.tag == dangerousTag)
                         {
                             foreach (HealthEntity he in gm.entityList.healthEntities)
                             {
