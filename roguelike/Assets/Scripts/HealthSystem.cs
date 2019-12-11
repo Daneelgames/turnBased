@@ -25,10 +25,10 @@ public class HealthSystem : MonoBehaviour
         }
     }
 
-    public void DamageEntity(HealthEntity damaged, HealthEntity attacker)
+    public void DamageEntity(HealthEntity damaged, HealthEntity attacker, int damageAmount)
     {
         damaged.anim.SetTrigger("Damaged");
-        damaged.health--;
+        damaged.health -= damageAmount;
 
         if (damaged.health <= 0)
         {

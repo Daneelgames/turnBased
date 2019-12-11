@@ -41,7 +41,7 @@ public class AttackSystem : MonoBehaviour
                     if (gm.entityList.npcEntities[i].gameObject == targetObject)
                     {
                         //gm.entityList.npcEntities[i].health.health -= 1;
-                        gm.healthSystem.DamageEntity(gm.entityList.npcEntities[i].health, gm.player);
+                        gm.healthSystem.DamageEntity(gm.entityList.npcEntities[i].health, gm.player, 0);
                         gm.movementSystem.PushObject(gm.entityList.npcEntities[i].health, gm.player.transform.position);
                         break;
                     }
@@ -143,7 +143,7 @@ public class AttackSystem : MonoBehaviour
                     if (damaged != null)
                     {
                         // damage entity
-                        gm.healthSystem.DamageEntity(damaged, projectiles[i].master);
+                        gm.healthSystem.DamageEntity(damaged, projectiles[i].master, 1);
                         projectiles[i].damagedObject = damaged;
                         projectiles[i].deathPosition = damaged.transform.position;
 

@@ -173,14 +173,15 @@ public class MovementSystem : MonoBehaviour
                 {
                     if (hee.gameObject == targetObj)
                     {
-                        gm.healthSystem.DamageEntity(hee, he);
+                        gm.healthSystem.DamageEntity(hee, he, 1);
+                        gm.healthSystem.DamageEntity(he, he, 1);
                         break;
                     }
                 }
             }
             else if (targetObj.layer == 9) // wall
             {
-                gm.healthSystem.DamageEntity(he, he);
+                gm.healthSystem.DamageEntity(he, he, 1);
             }
         }
     }

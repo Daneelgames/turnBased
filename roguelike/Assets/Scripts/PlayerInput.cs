@@ -32,8 +32,13 @@ public class PlayerInput : MonoBehaviour
 
         if (Input.GetKeyDown("r"))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            Restart();
         }
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void LateUpdate()
